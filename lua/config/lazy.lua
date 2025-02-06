@@ -22,6 +22,7 @@ require("lazy").setup({
 		{ import = "lazyvim.plugins.extras.editor.fzf" },
 		{ import = "lazyvim.plugins.extras.coding.mini-comment" },
 		{ import = "lazyvim.plugins.extras.coding.mini-surround" },
+		{ import = "lazyvim.plugins.extras.coding.nvim-cmp" }, -- Used by Obsidian.nvim
 
 		{ import = "lazyvim.plugins.extras.formatting.prettier" },
 

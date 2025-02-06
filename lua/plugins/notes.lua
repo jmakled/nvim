@@ -1,5 +1,11 @@
 return {
 	{
+		"hrsh7th/nvim-cmp",
+		lazy = true,
+		ft = "markdown",
+		enabled = true,
+	},
+	{
 		"mfussenegger/nvim-lint",
 		enabled = false,
 	},
@@ -20,10 +26,57 @@ return {
 				{
 					name = "notes",
 					path = "$NOTE_DIR",
+					overrides = {
+						daily_notes = {
+							folder = "journal/daily_pages/" .. os.date("%Y") .. "/",
+							date_format = "%Y-%m-%d",
+							alias_format = "%B %-d, %Y",
+							default_tags = { "daily-page" },
+							template = "Page - Daily Page.md",
+						},
+						templates = {
+							folder = "templates",
+							date_format = "%Y-%m-%d",
+							time_format = "%I:%M %p",
+							-- A map for custom variable:function pairs
+							substitutions = {
+								-- NOTE: these weird keywords are Obsidian syntax
+								--       these substitutions bridge the gap btwn app & nvim
+
+								["date:dddd"] = function()
+									return os.date("%A") -- Full weekday name
+								end,
+
+								["date:Do"] = function()
+									local day = tonumber(os.date("%-d")) -- day w/o leading zero
+									local suffix = (function()
+										if day % 10 == 1 and day ~= 11 then
+											return "st"
+										elseif day % 10 == 2 and day ~= 12 then
+											return "nd"
+										elseif day % 10 == 3 and day ~= 13 then
+											return "rd"
+										else
+											return "th"
+										end
+									end)()
+									return day .. suffix -- day suffix; 1st, 4th, 22nd, etc
+								end,
+
+								["date:MMMM"] = function()
+									return os.date("%B") -- Full month name
+								end,
+
+								["time:hh:mm A"] = function()
+									return os.date("%I:%M %p") -- Format time as "08:12 PM"
+								end,
+							},
+						},
+					},
 				},
 				{
 					name = "code",
-					path = "~/Code",
+					path = "~/Documents",
 					overrides = {
 						templates = {
 							folder = vim.NIL,
@@ -34,14 +87,6 @@ return {
 						disable_frontmatter = true,
 					},
 				},
-			},
-
-			daily_notes = {
-				folder = "journal/daily_pages/" .. os.date("%Y") .. "/",
-				date_format = "%Y-%m-%d",
-				alias_format = "%B %-d, %Y",
-				default_tags = { "daily-page" },
-				template = "Page - Daily Page.md",
 			},
 
 			-- Completion of links and tags using nvim-cmp.
@@ -106,46 +151,6 @@ return {
 
 				return out
 			end,
-
-			-- Optional, for templates (see below).
-			templates = {
-				folder = "templates",
-				date_format = "%Y-%m-%d",
-				time_format = "%I:%M %p",
-				-- A map for custom variable:function pairs
-				substitutions = {
-					-- NOTE: these weird keywords are Obsidian syntax
-					--       these substitutions bridge the gap btwn app & nvim
-
-					["date:dddd"] = function()
-						return os.date("%A") -- Full weekday name
-					end,
-
-					["date:Do"] = function()
-						local day = tonumber(os.date("%-d")) -- day w/o leading zero
-						local suffix = (function()
-							if day % 10 == 1 and day ~= 11 then
-								return "st"
-							elseif day % 10 == 2 and day ~= 12 then
-								return "nd"
-							elseif day % 10 == 3 and day ~= 13 then
-								return "rd"
-							else
-								return "th"
-							end
-						end)()
-						return day .. suffix -- day suffix; 1st, 4th, 22nd, etc
-					end,
-
-					["date:MMMM"] = function()
-						return os.date("%B") -- Full month name
-					end,
-
-					["time:hh:mm A"] = function()
-						return os.date("%I:%M %p") -- Format time as "08:12 PM"
-					end,
-				},
-			},
 
 			---@param url string
 			follow_url_func = function(url)

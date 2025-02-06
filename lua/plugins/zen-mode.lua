@@ -9,7 +9,7 @@ return {
 			backdrop = 1, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
 
 			-- * % of the width / height of the editor when <= 1
-			width = 0.9, -- width of the Zen window
+			width = 0.6, -- width of the Zen window
 			height = 0.85, -- height of the Zen window
 			options = {
 				-- signcolumn = "yes", -- disable signcolumn
